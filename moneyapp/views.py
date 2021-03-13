@@ -5,8 +5,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
-
+from .models import Customer
 from .forms import CreateUForm
+
 def loginUser(request):
     if request.user.is_authenticated:
         return redirect('/')
@@ -35,6 +36,8 @@ def registerUser(request):
             form=CreateUForm(request.POST)
             if form.is_valid():
                 form.save()
+                customer_info=Customer(name=form.cleaned_data.get('username'),email=form.cleaned_data.get('email'))
+                customer_info.save()
                 messages.success(request,'Account created' + (form.cleaned_data.get('username')))
                 return redirect('login')
         context={ 'form': form }
@@ -48,3 +51,4 @@ def home(request):
 def logoutUser(request):
     logout(request)
     return redirect('login')
+
