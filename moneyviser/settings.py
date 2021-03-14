@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'moneyviser.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Moneyviser',
+        'NAME': 'moneyviserapp',
         'USER': 'postgres',
         'PASSWORD':'insane',
         'HOST':'localhost',
