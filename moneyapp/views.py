@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
-from .models import Customer
+from .models import Customer,Expense,Expense_Split
 from .forms import CreateUForm
 
 def loginUser(request):
@@ -53,14 +53,15 @@ def home(request):
     print('value', value)
     context={'value': value}
     if request.method=='POST':
-        item=request.POST.get('itemname')
-        paidBy=request.POST.get('PaidUser')
-        amount=request.POST.get('amount')
+        itemdetail=request.POST.get('itemname')
+        paidBy=int(request.POST.get('PaidUser'))
+        amount=int(request.POST.get('amount'))
         share_members=request.POST.getlist('recipientId')
-        print()
-        print(paidBy)
-        print(share_members)
-
+        share_members=[int(i) for i in share_members]
+        members_count=len(share_members)
+        split_amount=(int(amount))/members_count
+        expense_info=Expense(item=itemdetail,no_of_splits=members_count,split_members=share_members,amount=amount,author_id=Customer(custmer_id=paidBy))
+        expense_info.save()
 
     return render(request,'dashboard.html',context)
 
