@@ -47,10 +47,10 @@ def registerUser(request):
 def home(request):
     value = {}
     for c in Customer.objects.raw('Select name,custmer_id From moneyapp_customer'):
-        print('gf',c.name)
-        print('id',c.custmer_id)
+        # print('gf',c.name)
+        # print('id',c.custmer_id)
         value[c.custmer_id] = c.name
-    print('value', value)
+    # print('value', value)
     context={'value': value}
     if request.method=='POST':
         itemdetail=request.POST.get('itemname')
@@ -62,6 +62,12 @@ def home(request):
         split_amount=(int(amount))/members_count
         expense_info=Expense(item=itemdetail,no_of_splits=members_count,split_members=share_members,amount=amount,author_id=Customer(custmer_id=paidBy))
         expense_info.save()
+        print(expense_info)
+
+        #print(expense_info.objects.get('expense'))
+        for i in share_members:
+            expense_split_info=Expense_Split(split_amount=split_amount,reciept_id=Customer(custmer_id=i),expense_id=expense_info)
+            expense_split_info.save()
 
     return render(request,'dashboard.html',context)
 
