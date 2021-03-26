@@ -45,10 +45,27 @@ def registerUser(request):
 
 @login_required(login_url='login')
 def home(request):
-    context={}
+    value = {}
+    for c in Customer.objects.raw('Select name,custmer_id From moneyapp_customer'):
+        print('gf',c.name)
+        print('id',c.custmer_id)
+        value[c.custmer_id] = c.name
+    print('value', value)
+    context={'value': value}
+    if request.method=='POST':
+        item=request.POST.get('itemname')
+        paidBy=request.POST.get('paiduser')
+        amount=request.POST.get('amount')
+        share_members=request.POST.get('recipientId')
+
+        print(paidBy)
+        print(share_members)
+
+
     return render(request,'dashboard.html',context)
 
 def logoutUser(request):
     logout(request)
     return redirect('login')
+
 

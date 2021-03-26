@@ -2,10 +2,34 @@
 <html>
     <title>Home
     </title>
+    {% block content %}
     <body>
         <h1>home</h1>
         
         <br>
         <a href="{% url 'logout' %}" class="ml-2">Logout</a>
+
+        <form action="" method="POST" >
+            {% csrf_token %}
+            <label for="itemName">Item</label>
+            <input id="itemName" name="itemname" type="text"><br>
+            <label id="paidBy" for="fname">Paid By</label>
+            
+            <select id="Paidby" name='PaidUser'>
+                {% for j,k in value.items %}
+                <option value="{{j}}" name="paiduser">{{k}}</option>
+                {% endfor %} 
+            </select><br>
+             
+            <label for="amount" >Amount</label>
+            <input id="amount"  name='amount' type="text"><br>
+            <label for="desc">Description</label>
+            {% for key, name in value.items %}
+            <input type="checkbox" name="recipientId" value={{key}}> 
+            <label for="name">{{name}}</label><br>
+            {% endfor %}
+            <input type="submit" value="Submit">
+        </form>
     </body>
+    {% endblock%}
 </html>

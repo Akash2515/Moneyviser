@@ -1,9 +1,8 @@
-
-
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 # Create your models here.
-
+#Customer tables has all the details of the registered
 class Customer(models.Model):
 	custmer_id=models.AutoField(primary_key=True)
 	name = models.CharField(max_length=200, null=True)
@@ -13,20 +12,22 @@ class Customer(models.Model):
 	def __str__(self):
 	 	return self.name
 
-class Group(models.Model):
-	group_id=models.AutoField(primary_key=True)
-	group_name=models.CharField(max_length=200,null=True)
 
 
 class Expense(models.Model):
-	group_id=models.ForeignKey(Group,on_delete=models.CASCADE)
-	items=models.CharField(max_length=200,null=False)
-	paid_by=models.ForeignKey(Customer,on_delete=models.CASCADE)
-	price=models.IntegerField(null=True)
 
-class BalanceTable(models.Model):
-	userName= models.OneToOneField(Customer)
-	customer_id=models.ForeignKey(Customer,on_delete=models.CASCADE)
-	balance=models.IntegerField(null=True)
-	
+	expense_id =models.AutoField(primary_key=True)
+	item = models.CharField(max_length=200,null=True)
+	author_id = models.ForeignKey(Customer,on_delete=models.CASCADE)
+	Bill_Date=models.DateField(auto_now_add=True,null=True)
+	no_of_splits=models.IntegerField(null=True)
+	split_members= ArrayField(ArrayField(models.IntegerField(null=True)))
+	paid = models.BooleanField(default=False)
+	amount=models.IntegerField(null=True)
 
+class Expense_Split(models.Model):
+	split_id = models.AutoField(primary_key=True)
+	expense_id= models.ForeignKey(Expense,on_delete=models.CASCADE)
+	split_amount=models.IntegerField(null=True)
+	reciept_id= models.ForeignKey(Customer,on_delete=models.CASCADE)
+	reciept_paid=models.BooleanField(default=False)
