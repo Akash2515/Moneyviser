@@ -17,13 +17,12 @@
             
             <select id="Paidby" name='PaidUser'>
                 {% for j,k in value.items %}
-                <option value="{{j}}" name="paiduser">{{k}}</option>
+                <option value={{j}} name="paiduser">{{k}}</option>
                 {% endfor %} 
             </select><br>
              
             <label for="amount" >Amount</label>
             <input id="amount"  name='amount' type="text"><br>
-            <label for="desc">Description</label>
             {% for key, name in value.items %}
             <input type="checkbox" name="recipientId" value={{key}}> 
             <label for="name">{{name}}</label><br>

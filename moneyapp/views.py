@@ -54,10 +54,10 @@ def home(request):
     context={'value': value}
     if request.method=='POST':
         item=request.POST.get('itemname')
-        paidBy=request.POST.get('paiduser')
+        paidBy=request.POST.get('PaidUser')
         amount=request.POST.get('amount')
-        share_members=request.POST.get('recipientId')
-
+        share_members=request.POST.getlist('recipientId')
+        print()
         print(paidBy)
         print(share_members)
 
