@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
+</head>
+{% block content %}
+<body>
+  <a href="/">Add expense</a>
+
+<table id="customers">
+  
+  <tr>
+    <th>Date</th>
+    <th>Item</th>
+    <th>Total_amount</th>
+    <th>split_amount</th>
+    <th>Payment status</th>
+    <th>payment details </th>
+    <th></th>
+    
+  </tr>
+    {% for valu in safe%}
+    <tr>
+      
+      {% for key,val in valu.items %}
+        
+        {% if key == 'Date'%}
+          <td>{{val}}</td>
+        {% endif %}
+
+        {% if key == 'item'%}
+          <td>{{val}}</td>
+        {% endif %}
+
+        {% if key == 'Total_amount'%}
+          <td>{{val}}</td>
+        {% endif %}
+
+        {% if key == 'amount_split'%}
+          <td>{{val}}</td>
+        {% endif %}
+
+        {% if key == 'payment_status'%}
+          {% if val == True %}
+            <td font-size=20px; > &#10003; </td>
+            <td>amount settled ! </td>
+          {% endif %}
+          {% if val == False %}
+            <td font-size=20px; > &#10005; </td>
+            <td><button type="button" id='{{valu.id}}' class="btn btn-success" onclick="myFunction(this.id);" >make payment</button>
+              <script>  
+              function myFunction(clicked_id) {
+                alert(clicked_id);
+                document.getElementById(clicked_id).innerHTML = "paid the amount";
+              }
+              </script>
+              
+            </td>
+          {% endif %}
+
+        {% endif %}
+        
+      
+      {% endfor %}
+    </tr>
+
+      
+      
+    {% endfor %}
+
+</table>
+
+</body>
+{% endblock %}
+</html>

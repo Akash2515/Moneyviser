@@ -21,6 +21,6 @@ urlpatterns = [
     path("login/",include('moneyapp.urls')),
     path("register/",include('moneyapp.urls')),
     path("logout/",include('moneyapp.urls')),
-    
+    path("expense/",include('moneyapp.urls')),
     path('admin/', admin.site.urls),
 ]
