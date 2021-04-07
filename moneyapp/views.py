@@ -11,10 +11,6 @@ from django.contrib.sessions.models import Session
 from django.core import signing
 from collections import defaultdict
 
-
-
-
-
 def loginUser(request):
     if request.user.is_authenticated:
         return redirect('/')
@@ -54,12 +50,18 @@ def registerUser(request):
 
 @login_required(login_url='login')
 def home(request):
+    
+    loggedinuser=int(request.user.id)
+    
+    loggedinuser=loggedinuser-1
+   
+    for i in Customer.objects.all().filter(custmer_id=loggedinuser):
+        displayusername=i.name
+        
     value = {}
     for c in Customer.objects.raw('Select name,custmer_id From moneyapp_customer'):
-        # print('gf',c.name)
-        # print('id',c.custmer_id)
         value[c.custmer_id] = c.name
-    # print('value', value)
+    
     context={'value': value}
     if request.method=='POST':
         itemdetail=request.POST.get('itemname')
@@ -76,7 +78,7 @@ def home(request):
         for i in share_members:
             expense_split_info=Expense_Split(split_amount=split_amount,reciept_id=Customer(custmer_id=i),expense_id=expense_info)
             expense_split_info.save()
-
+    
     return render(request,'dashboard.html',context)
 
 def logoutUser(request):
@@ -85,17 +87,19 @@ def logoutUser(request):
 
 
 def Expenselist(request):
+    
     safe_value=[]
     value=defaultdict(list)
     context={}
     userloggedin=int(request.user.id)
+    userloggedin=userloggedin-1
+   
     
     for safe in Expense_Split.objects.all().filter(reciept_id=userloggedin):
         Epk=safe.expense_id.pk
         exp=Expense.objects.filter(pk=Epk).get()
         value['Date']=(exp.Bill_Date)
         value['item']=(exp.item)
-        
         value['Total_amount']=(exp.amount)
         value['amount_split']=(safe.split_amount)
         value['payment_status']=(safe.reciept_paid)
@@ -103,12 +107,30 @@ def Expenselist(request):
         value=dict(value)
         value_copy=value.copy()
         safe_value.append(value_copy)
-        
-
-    if request.GET.get('payment'):
-        print('i paid') 
-    
     context['safe']=(safe_value)
+
+    if request.method=="POST":
+        
+        paid_expense_id=request.POST.get('identity')
+
+       
+        Expense_Split_update=Expense_Split.objects.get(reciept_id=userloggedin,expense_id=paid_expense_id)
+        Expense_Split_update.reciept_paid=True
+        Expense_Split_update.save()
+        
+        Expense_update=Expense.objects.get(pk=paid_expense_id)
+        print(Expense_update)
+        check_paid_count=Expense_Split.objects.filter(expense_id=paid_expense_id,reciept_paid=True).count()
+
+        for i in Expense.objects.all().filter(expense_id=paid_expense_id):
+            length=len(i.split_members)
+            
+        if length==check_paid_count:
+            Expense_update=Expense.objects.get(pk=paid_expense_id)
+            Expense_update.paid=True
+            Expense_update.save()
+        
+        
     return render(request,'expense.html',context)
 
 
