@@ -74,16 +74,16 @@ WSGI_APPLICATION = 'moneyviser.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'moneyviserapp',
-#         'USER': 'postgres',
-#         'PASSWORD':'insane',
-#         'HOST':'localhost',
-#         'port':'5432',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'Moneyviser',
+        'USER': 'postgres',
+        'PASSWORD':'Postgres255',
+        'HOST':'moneyviser.cxgwbsz1nuru.us-east-1.rds.amazonaws.com',
+        'port':'5432',
+    }
+}
 
 
 # Password validation
